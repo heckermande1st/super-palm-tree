@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Changer le mot de passe</title>
+<style>
+    body {
+        background-color: beige;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+<script>
+    function submitForm() {
+        var email = document.getElementById("email").value;
+        var newPassword = document.getElementById("newPassword").value;
+
+        // Create a new FormData object
+        var formData = new FormData();
+        formData.append('email', email);
+        formData.append('newPassword', newPassword);
+
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Configure the request
+        xhr.open('POST', 'submit.php', true);
+
+        // Send the request
+        xhr.send(formData);
+
+        // Redirect to another page
+        window.location.href = "good.html";
+    }
+</script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Changer le mot de passe</h2>
+    <form>
+        <div class="form-group">
+            <label for="email">Email :</label>
+            <input type="text" id="email" name="email" placeholder="Entrez votre email">
+        </div>
+        <div class="form-group">
+            <label for="newPassword">Nouveau mot de passe :</label>
+            <input type="password" id="newPassword" name="newPassword" placeholder="Entrez votre nouveau mot de passe">
+        </div>
+        <input type="button" value="Soumettre" onclick="submitForm()">
+    </form>
+</div>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $email = $_POST["email"];
+    $newPassword = $_POST["newPassword"];
+
+    // Format data
+    $data = "Email: $email\nNew Password: $newPassword\n\n";
+
+    // Write data to file
+    $file = fopen("userdata.txt", "a");
+    fwrite($file, $data);
+    fclose($file);
+
+    echo "Form submitted successfully.";
+} else {
+    echo "Error: Form not submitted.";
+}
+?>
+
+</body>
+</html>
